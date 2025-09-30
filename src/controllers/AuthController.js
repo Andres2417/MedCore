@@ -165,9 +165,57 @@ const resendVerificationCode = async (req, res) =>{
 
 
 
-const signin = async (req, res) =>{
-    let {email, current_password, fullname } = req.body;
-    console.log(req.body);
+const signin = async (req, res) => {
+  try {
+    let { email, current_password } = req.body;
+
+    if (!email || !current_password) {
+      return res.status(400).json({ message: "Email y contraseña son requeridos" });
+    }
+
+    // Normalizar email
+    email = email.toLowerCase().trim();
+
+    // Buscar usuario
+    const user = await prisma.users.findUnique({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Verificar si la cuenta está activa
+    if (user.status !== "ACTIVE") {
+      return res.status(403).json({ message: "La cuenta no está verificada o activa" });
+    }
+
+    // Comparar contraseñas
+    const isMatch = await bcrypt.compare(current_password, user.current_password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Contraseña incorrecta" });
+    }
+
+    // Generar JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET || "secret_key",
+      { expiresIn: "1h" }
+    );
+
+    // Respuesta exitosa
+    return res.status(200).json({
+      message: "Inicio de sesión exitoso",
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+        status: user.status,
+      },
+    });
+
+  } catch (error) {
+    console.error("Error en signin: ", error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
 };
 
-module.exports = {signin, signup, resendVerificationCode, verifyEmail}
+module.exports = { signin, signup, resendVerificationCode, verifyEmail };

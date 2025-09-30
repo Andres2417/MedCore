@@ -6,6 +6,6 @@ const router = express.Router();
 router.post("/sign-up", authController.signup);
 router.post("/verify-email", authController.verifyEmail);
 router.post("/resend-verification", authController.resendVerificationCode)
-//router.post("/sign-in", authController.signin)
+router.post("/sign-in", authController.signin)
 
 module.exports= router;
