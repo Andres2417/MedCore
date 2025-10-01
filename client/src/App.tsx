@@ -1,3 +1,4 @@
+import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminPage from "./pages/AdminPage";
 import SignInPage from "./pages/SignInPage";
