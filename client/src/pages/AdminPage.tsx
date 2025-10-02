@@ -19,7 +19,6 @@ const AdminPage = () => {
     const navItems = [
         { name: "Panel de Control", icon: "fas fa-tachometer-alt", isActive: true },
         { name: "Pacientes", icon: "fas fa-user-injured" },
-        { name: "Citas", icon: "fas fa-calendar-alt" },
         { name: "Inventario", icon: "fas fa-box-open" },
         { name: "Facturación", icon: "fas fa-file-invoice-dollar" },
         { name: "Reportes", icon: "fas fa-chart-line" },
