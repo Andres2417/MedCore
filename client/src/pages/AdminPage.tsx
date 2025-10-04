@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
     // Definiciones de color para referencia
@@ -12,7 +13,8 @@ const AdminPage = () => {
     #A8A8A8: Texto secundario
     #E0E0E0: Texto principal
     */
-   
+
+    const navigate = useNavigate();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // Módulos de navegación para renderizar la barra lateral
@@ -94,7 +96,11 @@ const AdminPage = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-[#121212] rounded-md shadow-lg py-1 z-50 origin-top-right">
                                     <a href="#" className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Mi Perfil</a>
                                     <a href="#" className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Configuración</a>
-                                    <a href="#" className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Cerrar Sesión</a>
+                                    <a href="#" onClick={(e) => { e.preventDefault();
+                                        localStorage.removeItem('token');
+                                        localStorage.removeItem('user');
+                                        navigate('/login');
+                                    }} className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Cerrar Sesión</a>
                                 </div>
                             )}
                         </div>
