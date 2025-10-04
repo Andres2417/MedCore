@@ -25,6 +25,20 @@ model Users {
   updatedAt           DateTime  @updatedAt
 }
 
+model Patients {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullname            String
+  birthdate           DateTime
+  age                 Int?     // Se puede autocalcular en el backend
+  email               String   @unique
+  phone               String?
+  status              String   @default("ACTIVE") // ACTIVE, INACTIVE
+  verificationCode    String?
+  verificationExpires DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 enum Role {
   ENFERMERO
   MEDICO

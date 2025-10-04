@@ -165,7 +165,7 @@ const resendVerificationCode = async (req, res) =>{
 
 
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   try {
     let { email, current_password } = req.body;
 
@@ -195,7 +195,7 @@ const signin = async (req, res) => {
 
     // Generar JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET || "secret_key",
       { expiresIn: "1h" }
     );
@@ -218,4 +218,4 @@ const signin = async (req, res) => {
   }
 };
 
-module.exports = { signin, signup, resendVerificationCode, verifyEmail };
+module.exports = { login, signup, resendVerificationCode, verifyEmail };

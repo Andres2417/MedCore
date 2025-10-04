@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const AdminPage = () => {
     // Definiciones de color para referencia
@@ -63,7 +63,6 @@ const AdminPage = () => {
                     </ul>
                 </nav>
                 <div className="mt-auto w-full">
-                    <div className="p-3 text-center text-[#A8A8A8] text-sm">© 2024 MedCore.</div>
                 </div>
             </aside>
 
@@ -122,7 +121,7 @@ const AdminPage = () => {
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Gráfico (Placeholder) */}
                     <div className="lg:col-span-2 bg-[#121212] p-6 rounded-xl shadow-lg">
-                        <h2 className="text-lg font-semibold text-[#E0E0E0] mb-4">Ingresos y Citas (Últimos 6 meses)</h2>
+                        <h2 className="text-lg font-semibold text-[#E0E0E0] mb-4">Ingresos (Últimos 6 meses)</h2>
                         <div className="bg-[#1E1E1E] rounded-md h-64 flex items-center justify-center text-[#A8A8A8]">
                             <span>Gráfico de líneas aquí (Placeholder)</span>
                         </div>

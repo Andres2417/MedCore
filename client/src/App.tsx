@@ -1,17 +1,21 @@
 import './index.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AdminPage from "./pages/AdminPage";
-import SignInPage from "./pages/SignInPage";
+import LogInPage from "./pages/LogInPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
-
+  function PrivateRoute({children}) {
+    const token = localStorage.getItem('token');
+    return token ? children : <Navigate to="/login" />;
+  }
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<div>Home Page</div>} />
-          <Route path="/signin" element={<SignInPage></SignInPage>} />
-          <Route path="/admin" element={<AdminPage></AdminPage>} />
+          <Route path="/" element={<HomePage></HomePage>} />
+          <Route path="/login" element={<LogInPage></LogInPage>} />
+          <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
         </Routes>
       </BrowserRouter>
     </>
