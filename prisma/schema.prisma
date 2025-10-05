@@ -16,27 +16,19 @@ datasource db {
 model Users {
   id                  String    @id @default(auto()) @map("_id") @db.ObjectId
   email               String    @unique
+  fullname            String
+  role                Role      @default(PACIENTE)
   current_password    String
-  fullname            String
-  status              String    @default("PENDING") //PENDING, ACTIVE, INACTIVE
-  verificationCode    String?
-  verificationExpires DateTime?
-  createdAt           DateTime  @default(now()) 
-  updatedAt           DateTime  @updatedAt
-}
-
-model Patients {
-  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-  fullname            String
-  birthdate           DateTime
-  age                 Int?     // Se puede autocalcular en el backend
-  email               String   @unique
+  status              String    @default("PENDING") // PENDING, ACTIVE, INACTIVE
+  specialization      String?
+  department          String?
+  license_number      String?
   phone               String?
-  status              String   @default("ACTIVE") // ACTIVE, INACTIVE
+  date_of_birth       DateTime?
   verificationCode    String?
   verificationExpires DateTime?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
 
 enum Role {
@@ -45,7 +37,3 @@ enum Role {
   ADMINISTRADOR
   PACIENTE
 }
-
-//MULTER
-//CSV-PARSER
-//PATH
