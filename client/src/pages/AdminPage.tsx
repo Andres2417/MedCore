@@ -20,7 +20,7 @@ const AdminPage = () => {
     // Módulos de navegación para renderizar la barra lateral
     const navItems = [
         { name: "Panel de Control", icon: "fas fa-tachometer-alt", isActive: true },
-        { name: "Pacientes", icon: "fas fa-user-injured" },
+        { name: "Usuarios", icon: "fas fa-user-injured" },
         { name: "Inventario", icon: "fas fa-box-open" },
         { name: "Facturación", icon: "fas fa-file-invoice-dollar" },
         { name: "Reportes", icon: "fas fa-chart-line" },
@@ -51,15 +51,27 @@ const AdminPage = () => {
                     <ul className="space-y-4">
                         {navItems.map((item) => (
                             <li key={item.name}>
-                                <a 
-                                    href="#" 
-                                    className={`flex items-center space-x-3 p-3 rounded-lg text-[#A8A8A8] transition-colors duration-200 
-                                        ${item.isActive ? 'bg-[#383535] text-[#56B1BF]' : 'hover:bg-[#383535] hover:text-[#56B1BF]'}`
-                                    }
+                                <button
+                                    onClick={() => {
+                                        if (item.name === "Gestión de Usuarios") {
+                                            navigate("/admin/upload-users");
+                                        } 
+                                        if (item.name === "Usuarios") {
+                                            navigate("/admin/list-users");
+                                        } 
+                                        // Agregar más rutas NAVBAR
+                                        
+                                        else {
+                                            navigate("/admin");
+                                        }
+                                    }}
+                                    className={`flex items-center w-full text-left space-x-3 p-3 rounded-lg text-[#A8A8A8] transition-colors duration-200 
+                                    ${item.isActive ? 'bg-[#383535] text-[#56B1BF]' : 'hover:bg-[#383535] hover:text-[#56B1BF]'}`}
                                 >
                                     <i className={item.icon}></i>
                                     <span>{item.name}</span>
-                                </a>
+                                </button>
+
                             </li>
                         ))}
                     </ul>
@@ -75,9 +87,9 @@ const AdminPage = () => {
                     <div className="flex items-center space-x-4">
                         {/* Campo de Búsqueda */}
                         <div className="relative w-full sm:w-auto">
-                            <input 
-                                type="text" 
-                                placeholder="Buscar..." 
+                            <input
+                                type="text"
+                                placeholder="Buscar..."
                                 className="px-4 py-2 rounded-lg border border-[#383535] bg-[#121212] text-[#E0E0E0] 
                                     focus:outline-none focus:ring-2 focus:ring-[#2E86AB] transition-all duration-200 w-full"
                             />
@@ -85,7 +97,7 @@ const AdminPage = () => {
                         </div>
                         {/* Menú de Perfil */}
                         <div className="relative">
-                            <button 
+                            <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                 className="flex items-center space-x-2 p-2 rounded-full bg-[#2E86AB] text-[#E0E0E0] hover:bg-[#56B1BF] transition-colors duration-200"
                             >
@@ -96,7 +108,8 @@ const AdminPage = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-[#121212] rounded-md shadow-lg py-1 z-50 origin-top-right">
                                     <a href="#" className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Mi Perfil</a>
                                     <a href="#" className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Configuración</a>
-                                    <a href="#" onClick={(e) => { e.preventDefault();
+                                    <a href="#" onClick={(e) => {
+                                        e.preventDefault();
                                         localStorage.removeItem('token');
                                         localStorage.removeItem('user');
                                         navigate('/login');
@@ -110,8 +123,8 @@ const AdminPage = () => {
                 {/* Sección de Tarjetas de KPIs (Responsive Grid) */}
                 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {kpis.map((kpi) => (
-                        <div 
-                            key={kpi.title} 
+                        <div
+                            key={kpi.title}
                             className="bg-[#121212] p-6 rounded-xl shadow-lg flex items-center justify-between transition-transform duration-300 hover:scale-[1.02]"
                         >
                             <div>
@@ -132,14 +145,14 @@ const AdminPage = () => {
                             <span>Gráfico de líneas aquí (Placeholder)</span>
                         </div>
                     </div>
-                    
+
                     {/* Alertas Recientes */}
                     <div className="bg-[#121212] p-6 rounded-xl shadow-lg">
                         <h2 className="text-lg font-semibold text-[#E0E0E0] mb-4">Alertas Recientes</h2>
                         <ul className="space-y-4">
                             {alerts.map((alert, index) => (
-                                <li 
-                                    key={index} 
+                                <li
+                                    key={index}
                                     className={`p-3 bg-[#383535] rounded-lg ${alert}`}
                                 >
                                     <i className={`fas fa-info-circle ${alert.iconColor} mr-2`}></i>

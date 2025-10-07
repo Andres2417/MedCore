@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 // Íconos de Font Awesome para Iniciar Sesión, Correo y Contraseña
@@ -20,7 +20,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const handleLogin = async(e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Intentando iniciar sesión con:', email);
 
@@ -36,8 +36,9 @@ const LoginPage = () => {
       localStorage.setItem('user', JSON.stringify(res.data.user));
 
       navigate('/admin');
-    } catch (error) {
-      setError(error.response?.data?.message || "Error de inicio de sesión");
+    } catch (err: any) {
+      const message = err?.response?.data?.message || err?.message || "Error de inicio de sesión";
+      setError(message);
     }
   };
 
