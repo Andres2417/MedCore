@@ -4,7 +4,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD
+        pass: process.env.SMTP_PASS
     }
 });
 //Acá generaremos un nro aleatorio entre 100000 y 9000000 es decir, de 6 digitos

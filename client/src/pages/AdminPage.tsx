@@ -56,7 +56,7 @@ const AdminPage = () => {
                                         if (item.name === "Gestión de Usuarios") {
                                             navigate("/admin/upload-users");
                                         } 
-                                        if (item.name === "Usuarios") {
+                                        else if (item.name === "Usuarios") {
                                             navigate("/admin/list-users");
                                         } 
                                         // Agregar más rutas NAVBAR

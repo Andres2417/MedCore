@@ -1,10 +1,10 @@
+require("dotenv").config();
 const express = require('express')
 const database = require("./config/database")
 const routes = require("./router/routes")
 const bodyparser = require("body-parser")
 const cors = require("cors")
 
-require("dotenv").config();
 
 const app = express();
 //Middleware CORS
