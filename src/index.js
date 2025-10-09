@@ -9,7 +9,7 @@ const cors = require("cors")
 const app = express();
 //Middleware CORS
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://med-core-ewen0o414-andres2417s-projects.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
