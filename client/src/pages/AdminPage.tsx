@@ -112,7 +112,7 @@ const AdminPage = () => {
                                         e.preventDefault();
                                         localStorage.removeItem('token');
                                         localStorage.removeItem('user');
-                                        navigate('/login');
+                                        navigate('/');
                                     }} className="block px-4 py-2 text-sm text-[#A8A8A8] hover:bg-[#383535]">Cerrar Sesión</a>
                                 </div>
                             )}
