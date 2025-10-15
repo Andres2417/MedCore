@@ -1,13 +1,27 @@
-const express = require("express");
+import express from "express";
+import multer from "multer";
+import { uploadUsers, getAllUsers } from "../controllers/UserController.js";
+
 const router = express.Router();
-const multer = require("multer");
-const { uploadUsers, getAllUsers } = require("../controllers/UserController");
 
-// Usamos solo almacenamiento en memoria (MemoryStorage) para evitar el error EROFS
-// en el sistema de archivos de solo lectura de Vercel.
-const upload = multer({ storage: multer.memoryStorage() });
+function getMulterStorage() {
+  // Vercel
+  if (process.env.VERCEL) {
+    return multer.memoryStorage();
+  }
 
+  // Entorno local -> se puede usar diskStorage
+  return multer.diskStorage({
+    destination: (req, file, cb) => cb(null, "uploads/"),
+    filename: (req, file, cb) =>
+      cb(null, Date.now() + "-" + file.originalname),
+  });
+}
+
+const upload = multer({ storage: getMulterStorage() });
+
+// Rutas
 router.post("/upload-users", upload.single("file"), uploadUsers);
 router.get("/all", getAllUsers);
 
-module.exports = router;
+export default router;
