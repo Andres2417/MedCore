@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
-      'https://med-core.vercel.app/',
+      'https://med-core.vercel.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
