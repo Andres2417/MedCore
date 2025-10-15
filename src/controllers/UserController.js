@@ -1,8 +1,8 @@
-const csv = require("csv-parser");
-const bcrypt = require("bcrypt");
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import { Readable } from 'stream';
+
 const prisma = new PrismaClient();
-const { Readable } = require("stream");
 
 // Normalizador de roles
 export function normalizeRole(role) {

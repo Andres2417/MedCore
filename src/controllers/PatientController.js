@@ -1,6 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client/extension';
+import crypto from 'crypto';
+
 const prisma = new PrismaClient();
-const crypto = require('crypto');
 
 // Calcular edad automáticamente
 export const calculateAge = (dateOfBirth) => {
