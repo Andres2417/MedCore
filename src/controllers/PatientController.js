@@ -10,7 +10,7 @@ const calculateAge = (dateOfBirth) => {
 };
 
 // Crear paciente
-exports.createPatient = async (req, res) => {
+export const createPatient = async (req, res) => {
   try {
     const { email, fullname, date_of_birth, phone } = req.body;
 
@@ -51,7 +51,7 @@ exports.createPatient = async (req, res) => {
 };
 
 // Obtener paciente por ID
-exports.getPatientById = async (req, res) => {
+export const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
     const patient = await prisma.users.findUnique({ where: { id } });
@@ -64,7 +64,7 @@ exports.getPatientById = async (req, res) => {
 };
 
 // Actualizar paciente
-exports.updatePatient = async (req, res) => {
+export const updatePatient = async (req, res) => {
   try {
     const { id } = req.params;
     const { fullname, date_of_birth, phone } = req.body;
@@ -89,7 +89,7 @@ exports.updatePatient = async (req, res) => {
 };
 
 // Cambiar estado del paciente
-exports.updatePatientState = async (req, res) => {
+export const updatePatientState = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body; // ACTIVO o INACTIVO
@@ -110,7 +110,7 @@ exports.updatePatientState = async (req, res) => {
 };
 
 // Listar pacientes (paginado)
-exports.listPatients = async (req, res) => {
+export const listPatients = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const skip = (Number(page) - 1) * Number(limit);

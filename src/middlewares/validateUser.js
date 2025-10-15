@@ -1,4 +1,4 @@
-const regex = {
+export const regex = {
   fullname: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,100}$/,
   identification: /^[0-9]{5,15}$/,
   phone: /^[0-9+\-()\s]{6,20}$/,
