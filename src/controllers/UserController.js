@@ -14,6 +14,17 @@ function normalizeRole(role) {
   return "PACIENTE";
 }
 
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await prisma.users.findMany();
+    res.json(users);
+  } catch (err) {
+    console.error("Error al obtener usuarios:", err);
+    res.status(500).json({ message: "Error al obtener usuarios" });
+  }
+};
+
+
 exports.uploadUsers = async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No se subió ningún archivo" });
 
