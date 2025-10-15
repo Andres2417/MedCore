@@ -37,7 +37,8 @@ model Users {
   createdRecords      MedicalRecords[] @relation("RecordCreator")
   MedicalRecords      MedicalRecords[]
 }
-  // Un usuario puede tener muchas citas, tanto como paciente como doctor
+
+// Un usuario puede tener muchas citas, tanto como paciente como doctor
 model Appointments {
   id     String   @id @default(auto()) @map("_id") @db.ObjectId
   date   DateTime
