@@ -7,7 +7,6 @@ import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto: ${PORT}`));
 // Middleware CORS
 app.use(
   cors({
