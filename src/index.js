@@ -18,7 +18,7 @@ app.use(cors({
 app.use(bodyparser.json());
 
 // Monta todas las rutas bajo el prefijo /api/v1/
-app.use('/api/v1/', routes) 
+app.use('/v1/', routes)
 
 // Iniciar la conexión a la base de datos
 database();
