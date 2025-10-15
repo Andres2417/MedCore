@@ -70,22 +70,24 @@ const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
     const token = localStorage.getItem('token');
 
-    const response = await axios.post(
-      'http://localhost:3002/api/v1/user/upload-users/',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: token ? `Bearer ${token}` : undefined,
-        },
-        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-          const loaded = progressEvent?.loaded ?? 0;
-          const total = progressEvent?.total ?? 1;
-          const percent = Math.round((loaded * 100) / total);
-          console.log(`Progreso: ${percent}%`);
-        },
-      }
-    );
+const API_URL = import.meta.env.VITE_API_URL;
+
+const response = await axios.post(
+  `${API_URL}/user/upload-users`,
+  formData,
+  {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: token ? `Bearer ${token}` : undefined,
+    },
+    onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+      const loaded = progressEvent?.loaded ?? 0;
+      const total = progressEvent?.total ?? 1;
+      const percent = Math.round((loaded * 100) / total);
+      console.log(`Progreso: ${percent}%`);
+    },
+  }
+);
 
     console.log('Respuesta del servidor:', response.data);
     setStatus('success');
