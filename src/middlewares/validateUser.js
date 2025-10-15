@@ -9,7 +9,7 @@ export const regex = {
 };
 
 // --- Sanitiza texto contra XSS ---
-const sanitizeString = (str) => {
+export const sanitizeString = (str) => {
   return str ? String(str).replace(/[<>]/g, "").trim() : "";
 };
 

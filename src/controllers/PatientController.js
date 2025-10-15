@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const crypto = require('crypto');
 
 // Calcular edad automáticamente
-const calculateAge = (dateOfBirth) => {
+export const calculateAge = (dateOfBirth) => {
   const diff = Date.now() - dateOfBirth.getTime();
   const ageDate = new Date(diff);
   return Math.abs(ageDate.getUTCFullYear() - 1970);

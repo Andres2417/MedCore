@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const { Readable } = require("stream");
 
 // Normalizador de roles
-function normalizeRole(role) {
+export function normalizeRole(role) {
   if (!role) return "PACIENTE";
   const r = role.toString().trim().toLowerCase();
   if (r.includes("admin")) return "ADMINISTRADOR";
