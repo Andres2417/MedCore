@@ -48,11 +48,11 @@ exports.uploadUsers = async (req, res) => {
 
         for (const user of results) {
           try {
-            const email = user.email.toLowerCase().trim();
 
-            // Verificar si ya existe el email antes de crear
-            const existing = await prisma.users.findUnique({ where: { email } });
+            // Verificar si ya existe el usuario por email o identificación
+            const existing = await prisma.users.findUnique({ where: { email: user.email.toLowerCase().trim() }, identification:user.identification?.trim() });
             if (existing) {
+              failed.push({row: user, error: "Email o identificación duplicado"});
               duplicates++;
               continue; // Omitir duplicado y seguir con el siguiente
             }

@@ -30,6 +30,40 @@ model Users {
   verificationExpires DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
+
+  // Relaciones
+  patientAppointments Appointments[]   @relation("PatientAppointments")
+  doctorAppointments  Appointments[]   @relation("DoctorAppointments")
+  createdRecords      MedicalRecords[] @relation("RecordCreator")
+  MedicalRecords      MedicalRecords[]
+}
+  // Un usuario puede tener muchas citas, tanto como paciente como doctor
+model Appointments {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  date   DateTime
+  reason String?
+  notes  String?
+
+  // Relaciones
+  patientId String  @db.ObjectId
+  doctorId  String? @db.ObjectId
+
+  patient Users  @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+  doctor  Users? @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: SetNull)
+}
+
+model MedicalRecords {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+
+  // Relaciones
+  patientId   String  @db.ObjectId
+  createdById String? @db.ObjectId
+
+  patient   Users  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  createdBy Users? @relation("RecordCreator", fields: [createdById], references: [id], onDelete: SetNull)
 }
 
 enum Role {
