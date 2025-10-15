@@ -1,4 +1,4 @@
-import { sanitizeString, regex, validateUserData } from './userValidate.js';
+import { sanitizeString, regex, validateUserData } from './validateUser.js';
 
 // --- Validación para creación de paciente ---
 export const validatePatientCreation = (req, res, next) => {
