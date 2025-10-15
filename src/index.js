@@ -30,6 +30,8 @@ app.get('/api/v1/test', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+app.use('/api/v1', routes);
+
 
 // Iniciar la conexión a la base de datos
 database();
