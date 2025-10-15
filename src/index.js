@@ -6,7 +6,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
-
+const PORT = process.env.PORT || 3002;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto: ${PORT}`));
 // Middleware CORS
 app.use(
   cors({
@@ -18,7 +19,9 @@ app.use(
     credentials: true,
   })
 );
-
+app.get('/', (req, res) => {
+  res.send('🚀 Backend funcionando correctamente');
+});
 // Middleware: POST, PUT, PATCH
 app.use(bodyParser.json());
 

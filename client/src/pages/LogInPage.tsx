@@ -25,7 +25,7 @@ const LoginPage = () => {
     console.log('Intentando iniciar sesión con:', email);
 
     try {
-      const res = await axios.post('http://localhost:3002/api/v1/auth/login', {
+      const res = await axios.post('/api/v1/auth/login', {
         email,
         current_password: password
       });

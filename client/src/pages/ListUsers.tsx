@@ -29,7 +29,7 @@ const UserList: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/api/v1/user/all")
+      .get("/api/v1/user/all")
       .then((res) => setUsers(res.data.users || res.data)) 
       .catch((err) => console.error("Error al obtener usuarios:", err))
       .finally(() => setLoading(false));
