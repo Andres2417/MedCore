@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer")
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.SMTP_USER,
@@ -8,12 +8,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 //Acá generaremos un nro aleatorio entre 100000 y 9000000 es decir, de 6 digitos
-const generateVerificationCode = () => {
+export const generateVerificationCode = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 
 };
 
-const sendVerificationEmail = async (email, fullname, verificationCode) => {
+export const sendVerificationEmail = async (email, fullname, verificationCode) => {
     const mailOptions = {
         from: process.env.SMTP_USER,
         to: email,
@@ -53,8 +53,3 @@ const sendVerificationEmail = async (email, fullname, verificationCode) => {
         return {success: false, error: error.message};
     }
 };
-    module.exports = {
-        transporter, 
-        generateVerificationCode,
-        sendVerificationEmail
-    };
