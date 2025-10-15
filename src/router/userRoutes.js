@@ -3,7 +3,7 @@ import multer from "multer";
 import { uploadUsers, getAllUsers } from "../controllers/UserController.js";
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "./uploads/" });
 
 // Rutas
 router.post("/upload-users", upload.single("file"), uploadUsers);
