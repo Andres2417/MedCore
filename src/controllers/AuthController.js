@@ -1,11 +1,12 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { generateVerificationCode, sendVerificationEmail } from "../config/emailConfig.js";
+
 const prisma = new PrismaClient();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { generateVerificationCode, sendVerificationEmail } = require("../config/emailConfig");
 
 // ================= SIGNUP =================
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     let { email, current_password, fullname } = req.body;
 
@@ -47,18 +48,21 @@ const signup = async (req, res) => {
       },
     });
 
-const emailResult = await sendVerificationEmail(email, fullname, verificationCode);
-console.log("Resultado envío email:", emailResult);
+    const emailResult = await sendVerificationEmail(email, fullname, verificationCode);
+    console.log("Resultado envío email:", emailResult);
 
-if (!emailResult.success) {
-  await prisma.users.delete({ where: { id: createUser.id } });
-  return res.status(500).json({
-    message: "Error enviando el email de verificación. Intenta nuevamente.",
-    error: emailResult.error,
-  });
-}
+    if (!emailResult.success) {
+      await prisma.users.delete({ where: { id: createUser.id } });
+      return res.status(500).json({
+        message: "Error enviando el email de verificación. Intenta nuevamente.",
+        error: emailResult.error,
+      });
+    }
 
-    return res.status(201).json({ message: "Usuario registrado correctamente. Revisa tu email para verificar la cuenta.", user: createUser });
+    return res.status(201).json({
+      message: "Usuario registrado correctamente. Revisa tu email para verificar la cuenta.",
+      user: createUser,
+    });
   } catch (error) {
     console.error("Error en signup:", error);
     return res.status(500).json({ message: "Error interno del servidor" });
@@ -66,7 +70,7 @@ if (!emailResult.success) {
 };
 
 // ================= VERIFY EMAIL =================
-const verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
   try {
     let { email, verificationCode } = req.body;
     if (!email || !verificationCode) {
@@ -103,7 +107,7 @@ const verifyEmail = async (req, res) => {
 };
 
 // ================= RESEND VERIFICATION CODE =================
-const resendVerificationCode = async (req, res) => {
+export const resendVerificationCode = async (req, res) => {
   try {
     let { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email es requerido" });
@@ -134,7 +138,7 @@ const resendVerificationCode = async (req, res) => {
 };
 
 // ================= LOGIN =================
-const login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     let { email, current_password } = req.body;
     if (!email || !current_password) {
@@ -149,7 +153,11 @@ const login = async (req, res) => {
     const isMatch = await bcrypt.compare(current_password, user.current_password);
     if (!isMatch) return res.status(401).json({ message: "Contraseña incorrecta" });
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET || "secret_key", { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET || "secret_key",
+      { expiresIn: "1h" }
+    );
 
     return res.status(200).json({
       message: "Inicio de sesión exitoso",
@@ -166,5 +174,3 @@ const login = async (req, res) => {
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
-
-module.exports = { signup, verifyEmail, resendVerificationCode, login };
