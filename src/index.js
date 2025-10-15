@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json());
 
 // Monta todas las rutas bajo el prefijo /api/v1/
-app.use('/v1/', routes);
+app.use('/api/v1/', routes);
 
 // Iniciar la conexión a la base de datos
 database();
