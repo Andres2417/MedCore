@@ -24,8 +24,12 @@ app.get('/', (req, res) => {
 // Middleware: POST, PUT, PATCH
 app.use(bodyParser.json());
 
-// Monta todas las rutas bajo el prefijo /api/v1/
-app.use('/api/v1/', routes);
+app.get('/api/v1/test', (req, res) => {
+  res.status(200).json({
+    message: 'Backend en Vercel funcionando',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Iniciar la conexión a la base de datos
 database();
