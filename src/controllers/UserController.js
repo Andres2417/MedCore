@@ -14,7 +14,7 @@ function normalizeRole(role) {
   return "PACIENTE";
 }
 
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await prisma.users.findMany();
     res.json(users);
@@ -24,8 +24,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-
-exports.uploadUsers = async (req, res) => {
+export const uploadUsers = async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "No se subió ningún archivo" });
 
   // Tamaño límite: 60MB
