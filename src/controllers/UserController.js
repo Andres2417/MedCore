@@ -1,37 +1,32 @@
-import csv from "csv-parser";
-import { Readable } from "stream";
-import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
-
+const csv = require("csv-parser");
+const bcrypt = require("bcrypt");
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { Readable } = require("stream");
 
-// 🧩 Normalizar roles de usuario
+// Normalizador de roles
 function normalizeRole(role) {
   if (!role) return "PACIENTE";
   const r = role.toString().trim().toLowerCase();
   if (r.includes("admin")) return "ADMINISTRADOR";
   if (r.includes("medic")) return "MEDICO";
   if (r.includes("enfermer")) return "ENFERMERO";
-  if (r.includes("pacient")) return "PACIENTE";
   return "PACIENTE";
 }
 
-export const uploadUsers = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No se subió ningún archivo." });
+exports.uploadUsers = async (req, res) => {
+  if (!req.file) return res.status(400).json({ message: "No se subió ningún archivo" });
+
+  // Tamaño límite: 60MB
+  if (req.file.size > 60 * 1024 * 1024) {
+    return res.status(400).json({ message: "El archivo supera el límite de 60MB" });
   }
 
-  // Límite de tamaño (60 MB)
-  if (req.file.size > 60 * 1024 * 1024) {
-    return res.status(400).json({ message: "El archivo supera el límite de 60MB." });
-  }
+  const results = [];
 
   try {
-    const buffer = req.file.buffer; // viene de memoryStorage()
-    const results = [];
-
-    // Convertir el buffer en stream legible
-    const stream = Readable.from(buffer.toString());
+    // Convertir el buffer en un stream legible
+    const stream = Readable.from(req.file.buffer.toString());
 
     stream
       .pipe(csv({ separator: "," }))
@@ -46,11 +41,8 @@ export const uploadUsers = async (req, res) => {
 
         for (const user of results) {
           try {
-            const email = user.email.toLowerCase().trim();
-
-            // Verificar si ya existe el usuario
             const existing = await prisma.users.findUnique({
-              where: { email },
+              where: { email: user.email.toLowerCase().trim() },
             });
 
             if (existing) {
@@ -62,7 +54,7 @@ export const uploadUsers = async (req, res) => {
 
             await prisma.users.create({
               data: {
-                email,
+                email: user.email.trim().toLowerCase(),
                 fullname: user.fullname.trim(),
                 role: normalizeRole(user.role),
                 current_password: hashedPassword,
@@ -71,21 +63,19 @@ export const uploadUsers = async (req, res) => {
                 department: user.department?.trim() || null,
                 license_number: user.license_number?.trim() || null,
                 phone: user.phone?.trim() || null,
-                date_of_birth: user.date_of_birth
-                  ? new Date(user.date_of_birth)
-                  : null,
+                date_of_birth: user.date_of_birth ? new Date(user.date_of_birth) : null,
               },
             });
 
             inserted++;
           } catch (err) {
-            console.error(`Error con ${user.email}:`, err.message);
+            console.error(` Error con ${user.email}:`, err.message);
             errors++;
           }
         }
 
         return res.json({
-          message: "Proceso completado",
+          message: "Carga completada",
           total: results.length,
           insertados: inserted,
           duplicados: duplicates,
@@ -94,6 +84,6 @@ export const uploadUsers = async (req, res) => {
       });
   } catch (error) {
     console.error("Error al procesar el archivo:", error);
-    return res.status(500).json({ message: "Error al procesar el archivo CSV." });
+    return res.status(500).json({ message: "Error al procesar el archivo" });
   }
 };
