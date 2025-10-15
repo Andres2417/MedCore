@@ -5,19 +5,22 @@ const routes = require("./router/routes")
 const bodyparser = require("body-parser")
 const cors = require("cors")
 
-
 const app = express();
-//Middleware CORS
+
+// Middleware CORS
 app.use(cors({
     origin: ["http://localhost:5173", "https://med-core-ewen0o414-andres2417s-projects.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
-//middleware: POST, PUT, PATCH
-app.use(bodyparser.json());
-app.use('/api/v1/', routes)
 
-app.listen(process.env.PORT, () =>{
-    console.log(`Server running on port: ${process.env.PORT}`);
-    database();
-});
+// Middleware: POST, PUT, PATCH
+app.use(bodyparser.json());
+
+// Monta todas las rutas bajo el prefijo /api/v1/
+app.use('/api/v1/', routes) 
+
+// Iniciar la conexión a la base de datos
+database();
+
+module.exports = app; 
