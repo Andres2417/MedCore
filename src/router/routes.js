@@ -1,14 +1,18 @@
-const express = require('express');
+import express from 'express';
+
+import authRoutes from './authRoutes.js';
+import userRoutes from './userRoutes.js';
+import patientRoutes from './patientRoutes.js';
+
 const router = express.Router();
 
-const authRoutes = require('./authRoutes');
-const userRoutes = require('./userRoutes');
-const patientRoutes = require('./patientRoutes');
-//http://localhost:3002/api/v1/patients
+// http://localhost:3002/api/v1/patients
 router.use("/patients", patientRoutes);
-//http://localhost:3002/api/v1/auth
-router.use("/auth",authRoutes);
-//http://localhost:3002/api/v1/user
-router.use("/user",userRoutes);
 
-module.exports = router;
+// http://localhost:3002/api/v1/auth
+router.use("/auth", authRoutes);
+
+// http://localhost:3002/api/v1/user
+router.use("/user", userRoutes);
+
+export default router;

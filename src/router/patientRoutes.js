@@ -1,16 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const {
+import express from 'express';
+import {
   createPatient,
   getPatientById,
   updatePatient,
   updatePatientState,
   listPatients
-} = require('../controllers/PatientController');
-const {
+} from '../controllers/PatientController.js';
+import {
   validatePatientCreation,
   validatePatientUpdate
-} = require('../middlewares/patientValidation');
+} from '../middlewares/patientValidation.js';
+
+const router = express.Router();
 
 // Rutas de pacientes
 router.post('/', validatePatientCreation, createPatient); // Crear paciente
@@ -19,4 +20,4 @@ router.put('/:id', validatePatientUpdate, updatePatient); // Actualizar paciente
 router.patch('/state/:id', updatePatientState); // Cambiar estado (activo/inactivo)
 router.get('/', listPatients); // Listar pacientes (paginado)
 
-module.exports = router;
+export default router;
