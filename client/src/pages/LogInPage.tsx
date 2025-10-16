@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/api';
 // Íconos de Font Awesome para Iniciar Sesión, Correo y Contraseña
 // Se asume que la librería CSS/JS de Font Awesome está cargada globalmente.
 
@@ -25,7 +25,7 @@ const LoginPage = () => {
     console.log('Intentando iniciar sesión con:', email);
 
     try {
-      const res = await axios.post('/api/v1/auth/login', {
+      const res = await api.post('/auth/login', {
         email,
         current_password: password
       });
