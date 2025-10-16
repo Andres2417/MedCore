@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { Readable } from 'stream';
+import csv from 'csv-parser';
 
 const prisma = new PrismaClient();
 
