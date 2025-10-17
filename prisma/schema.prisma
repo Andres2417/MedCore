@@ -16,55 +16,77 @@ datasource db {
 model Users {
   id                  String    @id @default(auto()) @map("_id") @db.ObjectId
   email               String    @unique
-  fullname            String
-  identification      String?   @unique
-  role                Role      @default(PACIENTE)
   current_password    String
-  status              String    @default("PENDING") // PENDING, ACTIVE, INACTIVE
-  specialization      String?
-  department          String?
-  license_number      String?
-  phone               String?
-  date_of_birth       DateTime?
+  fullname            String
+  role                Role      @default(PACIENTE)
+  status              UserStatus @default(PENDING) // PENDING, ACTIVE, INACTIVE
+  specialization      String? // only for doctors
   verificationCode    String?
   verificationExpires DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
-
-  // Relaciones
-  patientAppointments Appointments[]   @relation("PatientAppointments")
-  doctorAppointments  Appointments[]   @relation("DoctorAppointments")
-  createdRecords      MedicalRecords[] @relation("RecordCreator")
-  MedicalRecords      MedicalRecords[]
+  patient             Patient?  
+  diagnosticsCreated  Diagnostic[]     @relation("DoctorDiagnostics")
 }
 
-// Un usuario puede tener muchas citas, tanto como paciente como doctor
-model Appointments {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
-  date   DateTime
-  reason String?
-  notes  String?
-
-  // Relaciones
-  patientId String  @db.ObjectId
-  doctorId  String? @db.ObjectId
-
-  patient Users  @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
-  doctor  Users? @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: SetNull)
+model Patient {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId @unique
+  documentNumber  String   @unique
+  birthDate       DateTime
+  age             Int
+  gender          String
+  phoneNumber     String?
+  address         String?
+  state           State    @default(ACTIVE) // ACTIVE, INACTIVE
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diagnostics     Diagnostic[]
 }
 
-model MedicalRecords {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String?
-  createdAt   DateTime @default(now())
+model Diagnostic {
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  patientId           String    @db.ObjectId
+  doctorId            String    @db.ObjectId
+  title               String
+  description         String
+  symptoms            String
+  diagnosis           String
+  treatment           String
+  observations        String?
+  diagnosisDate       DateTime  @default(now())
+  nextAppointment     DateTime?
+  state               DiagnosticState @default(ACTIVE) // ACTIVE, INACTIVE, DELETED
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   // Relaciones
-  patientId   String  @db.ObjectId
-  createdById String? @db.ObjectId
+  patient             Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor              Users     @relation("DoctorDiagnostics", fields: [doctorId], references: [id])
+  documents           DiagnosticDocument[]
+  @@index([patientId])
+  @@index([doctorId])
+}
 
-  patient   Users  @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  createdBy Users? @relation("RecordCreator", fields: [createdById], references: [id], onDelete: SetNull)
+model DiagnosticDocument {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  diagnosticId  String   @db.ObjectId
+  filename      String // original name of the file
+  storedfilename String // unique name to avoid conflicts
+  filepath    String  // path where the file is stored
+  fileType     String // e.g., pdf, png, jpg
+  mimeType     String // e.g., application/pdf, image/png
+  fileSize     Int // in bytes
+  description  String? // optional description of the document
+  uploadedBy   String   @db.ObjectId
+  uploadedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  // Relaciones
+  diagnostic   Diagnostic @relation(fields: [diagnosticId], references: [id], onDelete: Cascade)
+
+  @@index([diagnosticId])
 }
 
 enum Role {
@@ -73,3 +95,21 @@ enum Role {
   ADMINISTRADOR
   PACIENTE
 }
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+}
+
+enum State {
+  ACTIVE
+  INACTIVE
+}
+
+enum DiagnosticState {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+

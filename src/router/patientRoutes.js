@@ -1,5 +1,5 @@
 import express from 'express';
-import {
+import PatientController, {
   createPatient,
   getPatientById,
   updatePatient,
@@ -19,5 +19,6 @@ router.get('/:id', getPatientById); // Obtener paciente por ID
 router.put('/:id', validatePatientUpdate, updatePatient); // Actualizar paciente
 router.patch('/state/:id', updatePatientState); // Cambiar estado (activo/inactivo)
 router.get('/', listPatients); // Listar pacientes (paginado)
+router.post('/:patientId/diagnostics', PatientController.createDiagnostic); // Crear diagnóstico para un paciente
 
 export default router;

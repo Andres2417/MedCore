@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
+import diagnosticService from '../services/diagnostic.service';
 
 const prisma = new PrismaClient();
 
@@ -136,4 +137,49 @@ export const listPatients = async (req, res) => {
     console.error('Error al listar pacientes:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
+};
+
+const createDiagnostic = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const doctorId = req.user.id; // Asumiendo que el ID del doctor viene en req.user
+    const files = req.files; // Archivos subidos
+
+    //validar que existan los datos necesarios
+    const { title, description, symptoms, diagnosis, treatment } = req.body;
+
+    if (!title || !description || !symptoms || !diagnosis || !treatment) {
+      //si hay error eliminar archivos subidos
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            await fs.unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Error al eliminar el archivo:", unlinkError);
+          }
+        }
+      }
+      return res.status(400).json({ message: 'Faltan datos requeridos',
+        required: ['title', 'description', 'symptoms', 'diagnosis', 'treatment']
+       });
+    }
+  const diagnostic = await diagnosticService.createDiagnostic(
+      patientId,
+      doctorId,
+      req.body,
+      files
+    );
+    return res.status(201).json({ message: 'Diagnóstico creado', data: diagnostic, });
+  } catch (error) {
+    console.error('Error al crear diagnóstico:', error);
+    res.status(400).json({ message: error.message || 'Error interno del servidor' });
+  };
+};
+export default {
+  createPatient,
+  getPatientById,
+  updatePatient,
+  updatePatientState,
+  listPatients,
+  createDiagnostic,
 };
