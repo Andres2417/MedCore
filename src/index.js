@@ -1,6 +1,6 @@
 import 'dotenv/config'; // equivalente a require('dotenv').config()
 import express from 'express';
-import database from './config/database.js';
+//import database from './config/database.js';
 import routes from './router/routes.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
