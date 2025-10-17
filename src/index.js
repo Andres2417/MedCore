@@ -34,6 +34,6 @@ app.use('/api/v1', routes);
 
 
 // Iniciar la conexión a la base de datos
-database();
+//database();
 
 export default app;
