@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
-import {DiagnosticService} from '../services/diagnostic.service.js';
+import DiagnosticService from '../services/diagnostic.service.js';
 
 const prisma = new PrismaClient();
 
