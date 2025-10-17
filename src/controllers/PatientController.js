@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
-import {diagnosticService} from '../services/diagnostic.service.js';
+import {DiagnosticService} from '../services/diagnostic.service.js';
 
 const prisma = new PrismaClient();
 
@@ -163,7 +163,7 @@ const createDiagnostic = async (req, res) => {
         required: ['title', 'description', 'symptoms', 'diagnosis', 'treatment']
        });
     }
-  const diagnostic = await diagnosticService.createDiagnostic(
+  const diagnostic = await DiagnosticService.createDiagnostic(
       patientId,
       doctorId,
       req.body,
